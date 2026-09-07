@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: #FAFAF6;
+  --color-ink: #1C2B24;
+  --color-moss: #3F7A5C;
+  --color-moss-dark: #2E5C44;
+  --color-marigold: #E8A33D;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+* {
+  border-color: theme("colors.line");
+}
+
+::selection {
+  background: rgba(63, 122, 92, 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-moss);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Faint corkboard texture — used sparingly on hero/landing surfaces to
+   reinforce the bulletin-board identity without competing with content. */
+.bg-board {
+  background-image: radial-gradient(rgba(28, 43, 36, 0.055) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Signature element: stamped match-score badge */
+.match-stamp {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-moss);
+  color: var(--color-moss-dark);
+  font-family: var(--font-plex-mono), monospace;
+  font-weight: 600;
+  transform: rotate(-4deg);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(63,122,92,0.06), transparent 60%);
+  box-shadow: 0 2px 6px rgba(28, 43, 36, 0.08);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.opportunity-card:hover .match-stamp {
+  transform: rotate(2deg) scale(1.04);
+}
+
+.match-stamp::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(63,122,92,0.35);
+}
+
+/* Pinned category tag */
+.pin-tag {
+  position: relative;
+  display: inline-block;
+  padding: 0.15rem 0.6rem 0.15rem 0.9rem;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--color-marigold);
+  color: #4A3106;
+  border-radius: 2px;
+}
+
+.pin-tag::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(0,0,0,0.35);
+}
+
+.opportunity-card {
+  box-shadow: 0 1px 2px rgba(28, 43, 36, 0.04), 0 8px 20px -14px rgba(28, 43, 36, 0.12);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.opportunity-card:hover {
+  transform: rotate(-0.4deg) translateY(-3px);
+  box-shadow: 0 4px 8px rgba(28, 43, 36, 0.06), 0 20px 32px -16px rgba(28, 43, 36, 0.24);
+  border-color: rgba(63, 122, 92, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opportunity-card:hover,
+  .opportunity-card:hover .match-stamp {
+    transform: none;
+  }
+
+  /* The animate-fade-in-up/animate-fade-in Tailwind utilities (see
+     tailwind.config.ts) run on page/card load across nearly every page
+     in the app — unlike the hover transform above, these had no
+     reduced-motion guard at all, so a user with vestibular motion
+     sensitivity who has set this OS-level preference saw every card and
+     section slide/fade in on every single page load regardless.
+     Neutralizing the animation (not just its transform) is what's
+     needed here, since fade-in-up's keyframes animate opacity too —
+     content must still end up visible, immediately, not stuck at its
+     0%-keyframe hidden state. */
+  .animate-fade-in-up,
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

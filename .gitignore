@@ -1,0 +1,14 @@
+node_modules
+.next
+.env.local
+.DS_Store
+tsconfig.tsbuildinfo
+.vercel
+.env*
+playwright-report
+test-results
+tests/.storage-*.json
+tests/.a11y-fixture.json
+# Supabase CLI's own local cache (created by any `npx supabase ...`
+# invocation, e.g. RUNBOOK.md's backup command) — not project content.
+supabase/.temp
