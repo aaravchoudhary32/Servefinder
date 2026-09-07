@@ -29,7 +29,18 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # Was 20: @supabase/realtime-js (initialized as a side effect
+          # of createClient(), even though no test ever uses realtime)
+          # requires a native WebSocket global, added in Node 22 — under
+          # 20 it throws "Node.js detected but native WebSocket not
+          # found" the instant lib/supabaseClient.ts's module-scope
+          # createClient() call runs. Confirmed live: reproduced this
+          # exact error locally against a real Node 20.18.1 binary, and
+          # confirmed 24 resolves it the same way. 24 also matches what
+          # GitHub's own runners already force actions/checkout and
+          # actions/setup-node themselves onto, now that Node 20 is
+          # deprecated for Actions.
+          node-version: 24
           cache: npm
 
       - run: npm ci
