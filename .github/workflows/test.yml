@@ -9,6 +9,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # Fake, non-secret, CI-only values — not a real Supabase project.
+    # lib/supabaseClient.ts calls createClient() at module scope, so it
+    # throws ("supabaseUrl is required") the instant any test file
+    # imports anything that transitively reaches it, before a single
+    # assertion runs — these two vars exist only to satisfy that
+    # constructor's synchronous URL/key validation. No unit test ever
+    # calls a method on the resulting client (grep confirms it: no
+    # `supabase.` call in any non-integration .test.ts file), so
+    # createClient() runs, validates, and returns — no network request
+    # is ever made with these values. Real, working Supabase
+    # credentials are never present in this repo or its CI — see
+    # SECURITY.md and .env.local.example.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://fake-project-ref.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: fake-anon-key-for-ci-only-not-a-real-credential
     steps:
       - uses: actions/checkout@v4
 
